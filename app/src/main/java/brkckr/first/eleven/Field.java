@@ -23,7 +23,7 @@ public class Field extends View
     /**
      * path
      */
-   private Path touchPath;
+    private Path touchPath;
 
     /**
      * dimensions
@@ -34,15 +34,15 @@ public class Field extends View
     private int width;
 
     private float grassRatio = (float) 5.5;
-    private int grassHeight;
+    private float grassHeight;
 
     private float cornerCircleRatio = 2;
-    private int cornerCircleRadius;
+    private float cornerCircleRadius;
 
     private float sixYardBoxWidthRatio = 20;
     private float sixYardBoxHeightRatio = (float) 5.5;
-    private int sixYardBoxWidth;
-    private int sixYardBoxHeight;
+    private float sixYardBoxWidth;
+    private float sixYardBoxHeight;
 
     private float penaltyPointHeightRatio = 11;
     private float penaltyPointRatio = (float) 0.5;
@@ -50,11 +50,11 @@ public class Field extends View
 
     private float penaltyAreaWidthRatio = 35;
     private float penaltyAreaHeightRatio = (float) 16.5;
-    private int penaltyAreaWidth;
-    private int penaltyAreaHeight;
+    private float penaltyAreaWidth;
+    private float penaltyAreaHeight;
 
     private float penaltyArcWidthRatio = 10;
-    private int penaltyArcWidth;
+    private float penaltyArcWidth;
 
     private float centerCircleRatio = (float) 9.15;
     private float centerSpotPointRatio = (float) 0.5;
@@ -120,31 +120,31 @@ public class Field extends View
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        width = MeasureSpec.getSize(widthMeasureSpec);
-        height = MeasureSpec.getSize(heightMeasureSpec);
-
-        grassHeight = (int) (height / heightRatio * grassRatio);
-
-        cornerCircleRadius = (int) (width / widthRatio * cornerCircleRatio);
-        calculateCornerSpotCoordinates();
-
-        centerCircleRadius = (int) (width / widthRatio * centerCircleRatio);
-        centerPointRadius = (width / widthRatio * centerSpotPointRatio);
-        calculateCenterCircleCoordinates();
-
-        sixYardBoxHeight = (int) (height / heightRatio * sixYardBoxHeightRatio);
-        sixYardBoxWidth = (int) (width / widthRatio * sixYardBoxWidthRatio);
-
-        penaltyAreaHeight = (int) (height / heightRatio * penaltyAreaHeightRatio);
-        penaltyAreaWidth = (int) (width / widthRatio * penaltyAreaWidthRatio);
-        penaltyPointRadius = (width / widthRatio * penaltyPointRatio);
-        calculatePenaltyPointCoordinates();
-
-        penaltyArcWidth = (int) (width / widthRatio * penaltyArcWidthRatio);
-
         if (!isMeasured)
         {
             isMeasured = true;
+
+            width = MeasureSpec.getSize(widthMeasureSpec);
+            height = MeasureSpec.getSize(heightMeasureSpec);
+
+            grassHeight = (height / heightRatio * grassRatio);
+
+            cornerCircleRadius = (width / widthRatio * cornerCircleRatio);
+            calculateCornerSpotCoordinates();
+
+            centerCircleRadius = (width / widthRatio * centerCircleRatio);
+            centerPointRadius = (width / widthRatio * centerSpotPointRatio);
+            calculateCenterCircleCoordinates();
+
+            sixYardBoxHeight = (height / heightRatio * sixYardBoxHeightRatio);
+            sixYardBoxWidth = (width / widthRatio * sixYardBoxWidthRatio);
+
+            penaltyAreaHeight = (height / heightRatio * penaltyAreaHeightRatio);
+            penaltyAreaWidth = (width / widthRatio * penaltyAreaWidthRatio);
+            penaltyPointRadius = (width / widthRatio * penaltyPointRatio);
+            calculatePenaltyPointCoordinates();
+
+            penaltyArcWidth = (width / widthRatio * penaltyArcWidthRatio);
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -180,9 +180,11 @@ public class Field extends View
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event)
+    {
 
-        switch (event.getAction()){
+        switch (event.getAction())
+        {
 
             case MotionEvent.ACTION_DOWN:
                 touchPath.moveTo(event.getX(), event.getY());
@@ -210,8 +212,8 @@ public class Field extends View
 
     private void drawGrass(Canvas canvas)
     {
-        int top = 0;
-        int bottom = grassHeight;
+        float top = 0;
+        float bottom = grassHeight;
 
         for (int i = 0; i < 20; i++)
         {
@@ -277,17 +279,17 @@ public class Field extends View
 
     private void drawSixYard1Box(Canvas canvas)
     {
-        canvas.drawRect(0 + ((width - sixYardBoxWidth) / 2), 0, width - ((width - sixYardBoxWidth) / 2), sixYardBoxHeight, paintLine);
+        canvas.drawRect(((width - sixYardBoxWidth) / 2), 0, width - ((width - sixYardBoxWidth) / 2), sixYardBoxHeight, paintLine);
     }
 
     private void drawSixYard2Box(Canvas canvas)
     {
-        canvas.drawRect(0 + ((width - sixYardBoxWidth) / 2), height - sixYardBoxHeight, width - ((width - sixYardBoxWidth) / 2), height, paintLine);
+        canvas.drawRect(((width - sixYardBoxWidth) / 2), height - sixYardBoxHeight, width - ((width - sixYardBoxWidth) / 2), height, paintLine);
     }
 
     private void drawPenalty1Area(Canvas canvas)
     {
-        canvas.drawRect(0 + ((width - penaltyAreaWidth) / 2), 0, width - ((width - penaltyAreaWidth) / 2), penaltyAreaHeight, paintLine);
+        canvas.drawRect(((width - penaltyAreaWidth) / 2), 0, width - ((width - penaltyAreaWidth) / 2), penaltyAreaHeight, paintLine);
     }
 
     private void drawPenalty2Area(Canvas canvas)
@@ -297,9 +299,9 @@ public class Field extends View
 
     private void drawPenaltyArea1Arc(Canvas canvas)
     {
-        int centerX = width / 2;
-        int centerY = penaltyAreaHeight;
-        int radius = penaltyArcWidth / 2;
+        float centerX = width / 2;
+        float centerY = penaltyAreaHeight;
+        float radius = penaltyArcWidth / 2;
 
         RectF rectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 
@@ -308,9 +310,9 @@ public class Field extends View
 
     private void drawPenaltyArea2Arc(Canvas canvas)
     {
-        int centerX = width / 2;
-        int centerY = height - penaltyAreaHeight;
-        int radius = penaltyArcWidth / 2;
+        float centerX = width / 2;
+        float centerY = height - penaltyAreaHeight;
+        float radius = penaltyArcWidth / 2;
 
         RectF rectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 
