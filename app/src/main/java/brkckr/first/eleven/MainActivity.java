@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity
         txtCoach = findViewById(R.id.txtCoach);
 
         playerList = createPlayerList();
+
+        createFirstEleven(new FirstEleven("Galatasaray", "Fatih Terim", "4-1-4-1", playerList));
     }
 
     /**
@@ -67,5 +69,170 @@ public class MainActivity extends AppCompatActivity
         playerList.add(new Player("Falcao", "https://secure.cache.images.core.optasports.com/soccer/players/150x150/uuid_8oc3lpz3xttrnwxk1fnnv7owl.png?v=1.69.0&gis=mk", 9));
 
         return playerList;
+    }
+
+    /**
+     * creates first eleven
+     *
+     * @param firstEleven
+     */
+    private void createFirstEleven(FirstEleven firstEleven)
+    {
+        setClub(firstEleven.club, firstEleven.formation);
+        setCoach(firstEleven.coach);
+
+        addPositions(firstEleven.formation);
+        addPlayers(firstEleven);
+    }
+
+    /**
+     * adds the positions to the field
+     * each position means a LinearLayout
+     * <p>
+     * for 4-1-4-1, adds 5 positions from goalkeeper to striker
+     */
+    private void addPositions(String formation)
+    {
+        //adds one more position
+        //just wanna make it like that
+        //you can change it
+        for (int i = 0; i <= getPositionCount(formation); i++)
+        {
+            LinearLayoutCompat layoutPosition = new LinearLayoutCompat(this);
+
+            LinearLayoutCompat.LayoutParams layoutParams = new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0);
+            layoutParams.weight = 1;
+            layoutPosition.setLayoutParams(layoutParams);
+            layoutPosition.setGravity(Gravity.CENTER);
+            layoutPosition.setOrientation(LinearLayoutCompat.HORIZONTAL);
+
+            layoutPosition.setId(i);
+
+            llContainer.addView(layoutPosition);
+        }
+    }
+
+    /**
+     * adds players to the field.
+     *
+     * @param firstEleven
+     */
+    private void addPlayers(FirstEleven firstEleven)
+    {
+        int[] formationArray = getFormationArray(firstEleven.formation.split("-"));
+
+        //starting index
+        //end index
+        // for ex : 4-1-4-1 means 4 defenders so defender position has 4 players
+        // start = 0 was goalkeeper.
+        // start = 1 is the first defender index in player list.
+        // end = 5 is the last defender index in player list
+        int start = 0;
+        int end = 0;
+
+        for (int i = 0; i < formationArray.length; i++)
+        {
+            start = end;
+            end += formationArray[i];
+
+            final LinearLayoutCompat positionLayout = llContainer.findViewById(i);
+
+            for (int j = start; j < end; j++)
+            {
+                //adds player container layout to the position layout.
+                final LinearLayoutCompat playerContainerLayout = getPlayerContainerLayout(i);
+                positionLayout.addView(playerContainerLayout);
+
+                final LinearLayoutCompat playerLayout = getPlayerLayout(firstEleven.playerList.get(j));
+
+                //adds with delay.
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable()
+                {
+                    public void run()
+                    {
+                        playerContainerLayout.addView(playerLayout);
+                    }
+                }, 500 + 250 * j);
+            }
+        }
+    }
+
+    private LinearLayoutCompat getPlayerContainerLayout(int index)
+    {
+        LinearLayoutCompat playerContainerLayout = new LinearLayoutCompat(this);
+        LinearLayoutCompat.LayoutParams layoutParams = new LinearLayoutCompat.LayoutParams(0, LinearLayoutCompat.LayoutParams.MATCH_PARENT);
+        layoutParams.weight = 1;
+        playerContainerLayout.setLayoutParams(layoutParams);
+        playerContainerLayout.setGravity(Gravity.CENTER);
+
+        playerContainerLayout.setId(index);
+
+        return playerContainerLayout;
+    }
+
+    private LinearLayoutCompat getPlayerLayout(Player player)
+    {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        LinearLayoutCompat layout = (LinearLayoutCompat) inflater.inflate(R.layout.layout_player, null, false);
+
+        setPlayer(layout, player);
+
+        return layout;
+    }
+
+    /**
+     * sets player's data
+     *
+     * @param layout
+     * @param player
+     */
+    private void setPlayer(LinearLayoutCompat layout, Player player)
+    {
+        AppCompatImageView imgProfilePicture = layout.findViewById(R.id.imgProfilePicture);
+
+        Glide.with(this).load(player.profilePictureUrl).transform(new CenterCrop(), new RoundedCorners(10)).into(imgProfilePicture);
+
+        AppCompatTextView txtName = layout.findViewById(R.id.txtName);
+        txtName.setText(player.name);
+        AppCompatTextView txtNumber = layout.findViewById(R.id.txtNumber);
+        txtNumber.setText(String.valueOf(player.number));
+    }
+
+    private void setCoach(String coach)
+    {
+        txtCoach.setText(coach);
+    }
+
+    private void setClub(String club, String formation)
+    {
+        txtClub.setText(club + " (" + formation + ")");
+    }
+
+    private int getPositionCount(String formation)
+    {
+        int[] formationArray = getFormationArray(formation.split("-"));
+        return formationArray.length;
+    }
+
+    /**
+     * gets formation array as int array
+     * first element of the array is the goalkeeper.
+     *
+     * @param stringArray : formation as string array
+     * @return
+     */
+    private int[] getFormationArray(String[] stringArray)
+    {
+        int[] numberArray = new int[stringArray.length + 1];
+        numberArray[0] = 1; // here is the goalkeeper.
+
+        // adds the numbers from formation (for ex : 4-1-4-1)
+        for (int i = 1; i < numberArray.length; i++)
+        {
+            numberArray[i] = Integer.parseInt(stringArray[i - 1]);
+        }
+
+        return numberArray;
     }
 }
