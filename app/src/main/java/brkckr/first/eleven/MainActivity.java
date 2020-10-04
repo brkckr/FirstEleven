@@ -43,6 +43,23 @@ public class MainActivity extends AppCompatActivity
         createFirstEleven(new FirstEleven("Galatasaray", "Fatih Terim", "4-1-4-1", playerList));
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.formation_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        cleanContainer();
+        createFirstEleven(new FirstEleven("Galatasaray", "Fatih Terim", item.getTitle().toString(), playerList));
+        return true;
+    }
+
+
     /**
      * creates sample data
      * <p>
@@ -234,5 +251,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         return numberArray;
+    }
+
+    private void cleanContainer()
+    {
+        llContainer.removeAllViews();
     }
 }
