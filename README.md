@@ -5,5 +5,7 @@
 
 <h4 align="left">Your own football lineup with player photos.</h4>
 
-![screenshot](https://github.com/brkckr/FirstEleven/blob/master/art/ss1.gif)
-![screenshot](https://github.com/brkckr/FirstEleven/blob/master/art/ss2.gif)
+
+![screenshot](https://github.com/brkckr/FirstEleven/blob/master/art/gif1.gif)  ![screenshot](https://github.com/brkckr/FirstEleven/blob/master/art/gif2.gif)
+
+
